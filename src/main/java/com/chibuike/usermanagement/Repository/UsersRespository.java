@@ -10,7 +10,7 @@ import com.chibuike.usermanagement.Entity.*;
 import java.util.UUID;
 
 public interface UsersRespository extends JpaRepository<User, UUID> {
-    boolean existsByemailAddress(@NotBlank(message = "Email is required") String emailAddress);
+    boolean existsByemail(@NotBlank(message = "Email is required") String email);
 
     Page<User> findByRole(role role, Pageable pageable);
 
