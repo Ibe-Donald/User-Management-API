@@ -8,6 +8,9 @@ import com.chibuike.usermanagement.Exception.ResourceNotFoundException;
 import com.chibuike.usermanagement.Exception.UserEmailException;
 import com.chibuike.usermanagement.Repository.UserRespository;
 import com.chibuike.usermanagement.status.role;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -74,6 +77,7 @@ public class UserService {
 
 
     // Get User by ID
+    @Cacheable(value = "users", key = "#Id")
     public UserResponseDto getUserId(UUID Id){
         User user = userRespository.findById(Id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with " + Id + "does not exists"));
@@ -97,6 +101,7 @@ public class UserService {
     }
 
     // UPDATE USER
+    @CachePut(value = "users", key = "#Id")
     public UserResponseDto updateUser(UUID Id, UserRequestDto dto){
         User existingUser = userRespository.findById(Id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with Id," + Id + " does not exist"));
@@ -111,6 +116,7 @@ public class UserService {
     }
 
     //Partial update
+    @CachePut(value = "users", key = "#Id")
     public UserResponseDto partialUpdate(UUID Id, UserPatchRequestDto dto){
         User existingUser = userRespository.findById(Id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with Id, " + Id + " does not exist"));
@@ -125,6 +131,7 @@ public class UserService {
     }
 
     // Delete User
+    @CacheEvict(value = "users", key = "#Id")
     public void deleteUser (UUID Id){
         User existingUser = userRespository.findById(Id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with Id, " + Id + " does not exist"));
