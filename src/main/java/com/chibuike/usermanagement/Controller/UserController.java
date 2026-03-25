@@ -71,11 +71,11 @@ public class UserController {
     }
 
     // Delete
-    @PostMapping("/{Id}")
+    @DeleteMapping("/{Id}")
     public String deleteUser(@PathVariable UUID Id)
     {
         userService.deleteUser(Id);
-        return "User with " + Id + " successfully deleted";
+        return "User with ID " + Id + " successfully deleted";
     }
 
 }
