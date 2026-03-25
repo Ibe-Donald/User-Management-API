@@ -6,22 +6,24 @@ import com.chibuike.usermanagement.Dto.UserResponseDto;
 import com.chibuike.usermanagement.Entity.User;
 import com.chibuike.usermanagement.Exception.ResourceNotFoundException;
 import com.chibuike.usermanagement.Exception.UserEmailException;
-import com.chibuike.usermanagement.Repository.UsersRespository;
+import com.chibuike.usermanagement.Repository.UserRespository;
 import com.chibuike.usermanagement.status.role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class UserService {
-    private final UsersRespository usersRespository;
+    private final UserRespository userRespository;
 
-    public UserService(UsersRespository usersRespository) {
-        this.usersRespository = usersRespository;
+    public UserService(UserRespository userRespository) {
+        this.userRespository = userRespository;
     }
 
     // Convert the Entity to DTO
@@ -42,7 +44,7 @@ public class UserService {
     public UserResponseDto registerUser(UserRequestDto dto){
 
         // Checks if User already exists before registering
-        if(usersRespository.existsByemail(dto.getEmail())){
+        if(userRespository.existsByemail(dto.getEmail())){
             throw new UserEmailException("The User with this email, " + dto.getEmail() + "exists");
         }
 
@@ -54,14 +56,14 @@ public class UserService {
         user.setPhoneNumber(dto.getPhoneNumber());
         user.setRole(dto.getRole());
 
-        return convertDto(usersRespository.save(user));
+        return convertDto(userRespository.save(user));
     }
 
-    // -- GET ALL EMPLOYEES --
-    public Page<UserResponseDto> fetchEmployees(int pageNumber, int pageSize){
+    // Get all Users
+    public Page<UserResponseDto> fetchUsers(int pageNumber, int pageSize){
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<User> user = usersRespository.findAll(pageable);
+        Page<User> user = userRespository.findAll(pageable);
 
         List<UserResponseDto> dtoList = user.stream()
                 .map(this::convertDto)
@@ -73,7 +75,7 @@ public class UserService {
 
     // Get User by ID
     public UserResponseDto getUserId(UUID Id){
-        User user = usersRespository.findById(Id)
+        User user = userRespository.findById(Id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with " + Id + "does not exists"));
 
         return convertDto(user);
@@ -84,7 +86,7 @@ public class UserService {
 
     public Page<UserResponseDto> getByRole(role role, int pageNumber, int pageSize){
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<User> user = usersRespository.findByRole(role, pageable);
+        Page<User> user = userRespository.findByRole(role, pageable);
 
         List<UserResponseDto> dtoList = user.stream()
                 .map(this::convertDto)
@@ -96,7 +98,7 @@ public class UserService {
 
     // UPDATE USER
     public UserResponseDto updateUser(UUID Id, UserRequestDto dto){
-        User existingUser = usersRespository.findById(Id)
+        User existingUser = userRespository.findById(Id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with Id," + Id + " does not exist"));
 
         existingUser.setName(dto.getName());
@@ -105,12 +107,12 @@ public class UserService {
         existingUser.setPhoneNumber(dto.getPhoneNumber());
         existingUser.setRole(dto.getRole());
 
-        return convertDto(usersRespository.save(existingUser));
+        return convertDto(userRespository.save(existingUser));
     }
 
     //Partial update
     public UserResponseDto partialUpdate(UUID Id, UserPatchRequestDto dto){
-        User existingUser = usersRespository.findById(Id)
+        User existingUser = userRespository.findById(Id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with Id, " + Id + " does not exist"));
 
         if (dto.getName() != null) existingUser.setName(dto.getName());
@@ -119,14 +121,14 @@ public class UserService {
         if (dto.getPhoneNumber() != null) existingUser.setPhoneNumber(dto.getPhoneNumber());
         if (dto.getRole() != null) existingUser.setRole(dto.getRole());
 
-        return convertDto(usersRespository.save(existingUser));
+        return convertDto(userRespository.save(existingUser));
     }
 
     // Delete User
     public void deleteUser (UUID Id){
-        User existingUser = usersRespository.findById(Id)
+        User existingUser = userRespository.findById(Id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with Id, " + Id + " does not exist"));
-        usersRespository.delete(existingUser);
+        userRespository.delete(existingUser);
 
     }
 }
