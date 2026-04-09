@@ -16,7 +16,7 @@ import java.util.UUID;
 public class UserResponseDto {
     private UUID userId;
 
-    private String name;
+    private String username;
 
     private gender gender;
 

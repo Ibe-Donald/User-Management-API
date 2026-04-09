@@ -16,7 +16,7 @@ public class User {
     private UUID userId;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private String username;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false)
@@ -27,6 +27,12 @@ public class User {
 
     @Column(name = "phoneNumber", nullable = false)
     private String phoneNumber;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "confirmPassword", nullable = false)
+    private String confirmPassword;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)

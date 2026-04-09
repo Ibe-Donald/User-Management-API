@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserPatchRequestDto {
 
-    private String name;
+    private String username;
 
     private gender gender;
 
