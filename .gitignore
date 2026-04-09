@@ -48,9 +48,6 @@ logs/
 # ========================
 .env
 .env.*
-application.properties
-application.yml
-compose.yaml
 
 # Keep example config
 !application-example.properties

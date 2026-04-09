@@ -2,6 +2,7 @@ package com.chibuike.usermanagement.Dto;
 
 import com.chibuike.usermanagement.status.gender;
 import com.chibuike.usermanagement.status.role;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class UserRequestDto {
 
     @NotBlank(message = "Name is required")
-    private String name;
+    private String username;
 
     @NotNull(message = "A gender is required")
     private gender gender;
@@ -26,6 +27,12 @@ public class UserRequestDto {
     @Pattern(regexp = "\\d{11}", message = "A valid phone number is required")
     @NotBlank(message = "A phone number is required")
     private String phoneNumber;
+
+    @NotBlank(message = "A password is required")
+    private String password;
+
+    @NotBlank(message = "Password confirmation is required")
+    private String confirmPassword;
 
     @NotNull(message = "Role is required")
     private role role;

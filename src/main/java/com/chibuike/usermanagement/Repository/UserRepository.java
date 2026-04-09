@@ -8,12 +8,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.chibuike.usermanagement.Entity.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRespository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, UUID> {
     boolean existsByemail(@NotBlank(message = "Email is required") String email);
 
     Page<User> findByRole(role role, Pageable pageable);
+
+    Optional<User> findByUsername (String username);
+
 
 }
